@@ -6,6 +6,7 @@ let {src,dest} = require('gulp'),
   clean_css = require('gulp-clean-css'),
   uglify = require('gulp-uglify-es').default,
   imagemin = require('gulp-imagemin');
+  scss = require('gulp-sass');
 
 function browserSync(params) {
   browsersync.init ({
@@ -71,6 +72,27 @@ function watchFiles(params) {
 
 function clean(params) {
   return del('./dist');
+}
+
+function css() {
+  return src(path.src.css)
+    .pipe(
+      scss({
+        outputStyle: 'expanded'
+      })
+    )
+    .pipe(
+      group_media()
+    )
+    .pipe(
+      autoprefixer({
+        overrideBrowserslist: ['last 5 versions'],
+        cascade: true
+      })
+    )
+    .pipe(clean_css())
+    .pipe(dest(path.build.css))
+    .pipe(browsersync.stream())
 }
 
 let build = gulp.series(clean, css, html, js, gulp.parallel( images, fonts));
