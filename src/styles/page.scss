@@ -1,0 +1,11 @@
+@import './common/resets';
+@import './common/header';
+@import './common/container';
+@import './common/footer';
+
+
+.page {
+    background-color: #eee;
+    height: 100px;
+    width: 100px;
+}

@@ -1,0 +1,11 @@
+@import './common/resets';
+@import './common/header';
+@import './common/container';
+@import './common/footer';
+
+
+.index {
+    background-color: #e5b;
+    height: 100px;
+    border-radius: 50%;
+}

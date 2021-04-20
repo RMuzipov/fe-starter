@@ -65,7 +65,7 @@ function fonts(params) {
 
 function watchFiles(params) {
   gulp.watch(['./src/*.html'], html);
-  gulp.watch(['./src/styles/*.css'], css);
+  gulp.watch(['./src/styles/*.scss'], compileScss);
   gulp.watch(['./src/js/*.js'], js);
   gulp.watch(['./src/img/*.{jpg,png,svg,gif,jpeg}'], images);
 }
@@ -74,15 +74,12 @@ function clean(params) {
   return del('./dist');
 }
 
-function css() {
-  return src(path.src.css)
+function compileScss() {
+  return src('./src/styles/*.scss')
     .pipe(
       scss({
         outputStyle: 'expanded'
       })
-    )
-    .pipe(
-      group_media()
     )
     .pipe(
       autoprefixer({
@@ -91,11 +88,11 @@ function css() {
       })
     )
     .pipe(clean_css())
-    .pipe(dest(path.build.css))
+    .pipe(dest('./dist/styles/'))
     .pipe(browsersync.stream())
 }
 
-let build = gulp.series(clean, css, html, js, gulp.parallel( images, fonts));
+let build = gulp.series(clean, compileScss, html, js, gulp.parallel( images, fonts));
 let watch = gulp.parallel(build, watchFiles, browserSync);
 
 exports.html = html;
