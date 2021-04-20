@@ -6,6 +6,7 @@ let {src,dest} = require('gulp'),
   clean_css = require('gulp-clean-css'),
   uglify = require('gulp-uglify-es').default,
   imagemin = require('gulp-imagemin');
+  scss = require('gulp-sass');
 
 function browserSync(params) {
   browsersync.init ({
@@ -64,7 +65,7 @@ function fonts(params) {
 
 function watchFiles(params) {
   gulp.watch(['./src/*.html'], html);
-  gulp.watch(['./src/styles/*.css'], css);
+  gulp.watch(['./src/styles/*.scss'], compileScss);
   gulp.watch(['./src/js/*.js'], js);
   gulp.watch(['./src/img/*.{jpg,png,svg,gif,jpeg}'], images);
 }
@@ -73,7 +74,25 @@ function clean(params) {
   return del('./dist');
 }
 
-let build = gulp.series(clean, css, html, js, gulp.parallel( images, fonts));
+function compileScss() {
+  return src('./src/styles/*.scss')
+    .pipe(
+      scss({
+        outputStyle: 'expanded'
+      })
+    )
+    .pipe(
+      autoprefixer({
+        overrideBrowserslist: ['last 5 versions'],
+        cascade: true
+      })
+    )
+    .pipe(clean_css())
+    .pipe(dest('./dist/styles/'))
+    .pipe(browsersync.stream())
+}
+
+let build = gulp.series(clean, compileScss, html, js, gulp.parallel( images, fonts));
 let watch = gulp.parallel(build, watchFiles, browserSync);
 
 exports.html = html;
