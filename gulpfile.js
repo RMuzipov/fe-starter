@@ -64,10 +64,10 @@ function fonts(params) {
 }
 
 function watchFiles(params) {
-  gulp.watch(['./src/*.html'], html);
-  gulp.watch(['./src/styles/*.scss'], compileScss);
-  gulp.watch(['./src/js/*.js'], js);
-  gulp.watch(['./src/img/*.{jpg,png,svg,gif,jpeg}'], images);
+  gulp.watch(['./src/**/*.html'], html);
+  gulp.watch(['./src/styles/**/*.scss'], compileScss);
+  gulp.watch(['./src/js/**/*.js'], js);
+  gulp.watch(['./src/img/**/*.{jpg,png,svg,gif,jpeg}'], images);
 }
 
 function clean(params) {
